@@ -30,7 +30,7 @@ library(tidygraph)
 library(tidyverse)
 library(tm)
 library(tibble)
-library(readxl)
+library(read)
 # activate klippy for copy-to-clipboard button
 klippy::klippy()
 
@@ -125,3 +125,55 @@ Family <- dplyr::case_when(sapply(tg, "[")$nodes$name %in% mon ~ "MONTAGUE",
                            TRUE ~ "Other")
 # inspect colors
 Family
+
+# set seed
+set.seed(12345)
+# edge size shows frequency of co-occurrence
+tg %>%
+  ggraph(layout = "fr") +
+  geom_edge_arc(colour= "gray50",
+                lineend = "round",
+                strength = .1,
+                aes(edge_width = weight,
+                    alpha = weight)) +
+  geom_node_point(size=log(v.size)*2, 
+                  aes(color=Family)) +
+  geom_node_text(aes(label = name), 
+                 repel = TRUE, 
+                 point.padding = unit(0.2, "lines"), 
+                 size=sqrt(v.size), 
+                 colour="gray10") +
+  scale_edge_width(range = c(0, 2.5)) +
+  scale_edge_alpha(range = c(0, .3)) +
+  theme_graph(background = "white") +
+  theme(legend.position = "top") +
+  guides(edge_width = FALSE,
+         edge_alpha = FALSE)
+
+# create a document feature matrix
+romeo_dfm <- quanteda::as.dfm(romeo)
+# create feature co-occurrence matrix
+romeo_fcm <- quanteda::fcm(romeo_dfm)
+# inspect data
+head(romeo_fcm)
+
+quanteda.textplots::textplot_network(romeo_fcm, 
+                                     min_freq = .5, 
+                                     edge_alpha = 0.5, 
+                                     edge_color = "purple",
+                                     vertex_labelsize = log(rowSums(romeo_fcm)),
+                                     edge_size = 2)
+
+dg <- ed %>%
+  tidyr::drop_na()
+dg <- dg[rep(seq_along(dg$Frequency), dg$Frequency), 1:2]
+rownames(dg) <- NULL
+
+names(igraph::degree(dgg))[which(igraph::degree(dgg) == max(igraph::degree(dgg)))]
+
+igraph::betweenness(dgg)
+
+names(igraph::betweenness(dgg))[which(igraph::betweenness(dgg) == max(igraph::betweenness(dgg)))]
+
+names(igraph::closeness(dgg))[which(igraph::closeness(dgg) == max(igraph::closeness(dgg)))]
+
