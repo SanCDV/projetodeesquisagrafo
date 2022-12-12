@@ -31,31 +31,33 @@ library(tidyverse)
 library(tm)
 library(tibble)
 library(read)
+library(readxl)
 # activate klippy for copy-to-clipboard button
 klippy::klippy()
 
 # load data
-rom <- read.delim("https://slcladal.github.io/data/romeo_tidy.txt", sep = "\t")
+rom <- rename(EXP_2015_2017_20221025, municipio = "Município", destino = "País")
+
 
 #  Agora transformamos essa tabela em uma matriz de coocorrência.
 
-rome <- crossprod(table(rom[1:2]))
-diag(rome) <- 0
-romeo <- as.data.frame(rome)
+municipio <- crossprod(table(rom[1:2]))
+diag(municipio) <- 0
+brasil <- as.data.frame(municipio)
 
 #   Para gerar grafos de rede dessa forma, definimos os nós e também podemos 
 #adicionar informações sobre os nós que podemos usar posteriormente (como informações de frequência).
 
-va <- romeo %>%
-  dplyr::mutate(Persona = rownames(.),
-                Occurrences = rowSums(.)) %>%
-  dplyr::select(Persona, Occurrences) %>%
-  dplyr::filter(!str_detect(Persona, "SCENE"))
+va <- brasil %>%
+  dplyr::mutate(destino = rownames(.),
+                entradas = rowSums(.)) %>%
+  dplyr::select(destino, entradas) %>%
+  dplyr::filter(!str_detect(destino, "SCENE"))
 
 #  Agora, definimos as arestas , ou seja, as conexões entre os nós e, novamente, 
 #podemos adicionar informações em variáveis ​​separadas que podemos usar posteriormente.
 
-ed <- romeo %>%
+ed <- municipio %>%
   dplyr::mutate(from = rownames(.)) %>%
   tidyr::gather(to, Frequency, BALTHASAR:TYBALT) %>%
   dplyr::mutate(Frequency = ifelse(Frequency == 0, NA, Frequency))
