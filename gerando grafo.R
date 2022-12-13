@@ -36,7 +36,7 @@ library(readxl)
 klippy::klippy()
 
 # load data
-rom <- rename(EXP_2015_2017_20221025, municipio = "Município", destino = "País")
+rom <- rename(EXP_2015_2022, municipio = "Município", destino = "País", )
 
 
 #  Agora transformamos essa tabela em uma matriz de coocorrência.
@@ -52,13 +52,13 @@ va <- brasil %>%
   dplyr::mutate(destino = rownames(.),
                 entradas = rowSums(.)) %>%
   dplyr::select(destino, entradas) %>%
-  dplyr::filter(!str_detect(destino, "SCENE"))
+  dplyr::filter(!str_detect(destino, "SCENE")) # ate aqui deu certo
 
 #  Agora, definimos as arestas , ou seja, as conexões entre os nós e, novamente, 
 #podemos adicionar informações em variáveis ​​separadas que podemos usar posteriormente.
 
 ed <- municipio %>%
-  dplyr::mutate(from = rownames(.)) %>%
+  dplyr::mutate(destino = rownames(.)) %>%
   tidyr::gather(to, Frequency, BALTHASAR:TYBALT) %>%
   dplyr::mutate(Frequency = ifelse(Frequency == 0, NA, Frequency))
 
