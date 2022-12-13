@@ -1,22 +1,3 @@
-# install packages
-install.packages("flextable")
-install.packages("GGally")
-install.packages("ggraph")
-install.packages("igraph")
-install.packages("Matrix")
-install.packages("network")
-install.packages("quanteda")
-install.packages("sna")
-install.packages("tidygraph")
-install.packages("tidyverse")
-install.packages("tm")
-install.packages("tibble")
-install.packages("quanteda.textplots")
-# install klippy for copy-to-clipboard button in code chunks
-install.packages("remotes")
-remotes::install_github("rlesur/klippy")
-
-# activate packages
 library(flextable)
 library(GGally)
 library(ggraph)
@@ -30,12 +11,11 @@ library(tidyverse)
 library(tm)
 library(tibble)
 library(readxl)
-library(stplanr)
-library(dplyr)
+
 
 
 EXP_2015_2022 <- read_excel("EXP_2015_2022.xlsx")
-View(EXP_2015_2022)
+
 # load data
 base <- rename(EXP_2015_2022, municipio = "Município", destino = "País", uf = 
                  "UF do Município", ano2015 = "2015 - Valor FOB (US$)", ano2016 =
@@ -43,6 +23,8 @@ base <- rename(EXP_2015_2022, municipio = "Município", destino = "País", uf =
                  "2018 - Valor FOB (US$)", ano2019 = "2019 - Valor FOB (US$)", ano2020 =
                  "2020 - Valor FOB (US$)", ano2021= "2021 - Valor FOB (US$)", ano2022 = 
                  "2022 - Valor FOB (US$)")
+
+
 # criar nova tabela de contingência
 matrix <- base[c("municipio", "destino", "ano2015")]
 
@@ -57,22 +39,18 @@ matrix_correspondencia2
 tabela_correspondencia <- as.data.frame(matrix_correspondencia2)
 tabela_correspondencia
 
+# Instalação e carregamento do pacote dplyr
+install.packages("dplyr")
+library(dplyr)
+
 # Cálculo da tabela de exportação com a função tapply
 tabela_exportacao <- with(tabela_correspondencia,
                           data.frame(municipio = levels(tabela_correspondencia$municipio),
                                      ano2015 = tapply(tabela_correspondencia$ano2015, tabela_correspondencia$municipio, sum)))
 
+# Exibição da tabela de exportação
+tabela_exportacao
 
-# Montando a base de dados
-#2015 cidade/uf
-export15 <- od_to_odmatrix(dados, attrib = 11, name_orig = 1, name_dest = 3)
-export2015UF <- od_to_odmatrix(EXP_2015_2022, attrib = 11, name_orig = 2, name_dest = 3)
 
-#2016 cidade/uf
-export2016 <- od_to_odmatrix(EXP_2015_2022, attrib = 10, name_orig = 1, name_dest = 3)
-export2016UF <- od_to_odmatrix(EXP_2015_2022, attrib = 10, name_orig = 2, name_dest = 3)
-
-#2017 cidade/uf
-export2017 <- od_to_odmatrix(EXP_2015_2022, attrib = 9, name_orig = 1, name_dest = 3)
-export2017UF <- od_to_odmatrix(EXP_2015_2022, attrib = 9, name_orig = 2, name_dest = 3)
-
+library(stplanr)
+export2015<- od_to_odmatrix(dados, attrib = 3, name_orig = 1, name_dest = 2)
