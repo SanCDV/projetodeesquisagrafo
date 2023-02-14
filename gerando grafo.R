@@ -47,8 +47,13 @@ exporta <- rename(exporta, municipio = "Município", destino = "País", uf =
 
 
 # criar nova tabela de contingência
+<<<<<<< HEAD
 #exporta2015 <- exporta[c("municipio", "destino", "ano2015")]
 #base$municipio <- as.character(base$municipio, base$destino, base$ano2015)
+=======
+matrix <- base[c("municipio", "destino", "ano2015")]
+base$municipio <- as.character(base$municipio, base$destino, base$ano2015)
+>>>>>>> 6d9e1dbf0b753f106868b626766e1ddf64f98d6d
 
 
 # Carregamento dos dados
@@ -67,10 +72,17 @@ exporta <- rename(exporta, municipio = "Município", destino = "País", uf =
 exporta2015muni <- od_to_odmatrix(exporta, attrib = 11, name_orig = 1, name_dest = 3)
 exporta2015UF <- od_to_odmatrix(exporta, attrib = 11, name_orig = 2, name_dest = 3)
 
+<<<<<<< HEAD
 
 
 
 
+=======
+export2015 = as.character(as.numeric(export2015))
+export2015 <- factor(c("name_origem", "nome_dest"))
+
+
+>>>>>>> 6d9e1dbf0b753f106868b626766e1ddf64f98d6d
 
 ..............................................................................
 
