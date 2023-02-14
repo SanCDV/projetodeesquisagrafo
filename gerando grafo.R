@@ -46,89 +46,12 @@ exporta <- rename(exporta, municipio = "Município", destino = "País", uf =
 
 
 
-# criar nova tabela de contingência
-<<<<<<< HEAD
-#exporta2015 <- exporta[c("municipio", "destino", "ano2015")]
-#base$municipio <- as.character(base$municipio, base$destino, base$ano2015)
-=======
-matrix <- base[c("municipio", "destino", "ano2015")]
-base$municipio <- as.character(base$municipio, base$destino, base$ano2015)
->>>>>>> 6d9e1dbf0b753f106868b626766e1ddf64f98d6d
-
-
-# Carregamento dos dados
-#dados <- matrix
-
-# Criação da matriz de correspondência com a função xtabs()
-#matrix_correspondencia2 <- xtabs(ano2015 ~ municipio + destino, data = dados)
-#matrix_correspondencia2
-
-# Transformação da matriz de correspondência em uma tabela
-#tabela_correspondencia <- as.data.frame(matrix_correspondencia2)
-#tabela_correspondencia
-
 # Montando a base de dados
 #2015 cidade/uf
 exporta2015muni <- od_to_odmatrix(exporta, attrib = 11, name_orig = 1, name_dest = 3)
 exporta2015UF <- od_to_odmatrix(exporta, attrib = 11, name_orig = 2, name_dest = 3)
 
-<<<<<<< HEAD
+#degree
+grau<-degree(exporta2015muni) #funcionando
 
-
-
-
-=======
-export2015 = as.character(as.numeric(export2015))
-export2015 <- factor(c("name_origem", "nome_dest"))
-
-
->>>>>>> 6d9e1dbf0b753f106868b626766e1ddf64f98d6d
-
-..............................................................................
-
-# criar nova tabela de contingência
-cidades <- base[c("municipio")]
-paises <- base[c("destino")]
-
-origem = unique(cidades)
-destino = unique(paises)
-
-# Matriz de coocorrência
-coocorrencia <-matrix(c (origem, destino), byrow = TRUE)
-colnames(coocorrencia) = origem
-rownames(coocorrencia) = destino
-
-# Criando o objeto da rede
-rede = graph_from_adjacency_matrix(coocorrencia, weighted = TRUE, mode = "upper")
-
-# Plotando a rede
-plot(rede, edge.width = E(rede)$weight * 0.5, vertex.label = V(rede)$name)
-
-
-..............................................................................
-
-library(igraph)
-# criar nova tabela de contingência
-cidades <- base[c("municipio")]
-paises <- base[c("destino")]
-
-origem = unique(cidades)
-destino = unique(paises)
-
-# Matriz de coocorrência
-coocorrencia <-matrix(c (origem, destino), byrow = TRUE)
-colnames(coocorrencia) = origem
-rownames(coocorrencia) = destino
-
-# Criando o objeto da rede
-rede = graph_from_adjacency_matrix(coocorrencia, weighted = TRUE, mode = "upper")
-
-# Plotando a rede
-plot(rede, edge.width = E(rede)$weight * 0.5, vertex.label = V(rede)$name)
-
-va <- export2015 %>%
-  dplyr::mutate(municipio = rownames(.),
-                destino = rowSums(.)) %>%
-  dplyr::select(municipio, destino)
-  
-  
+centr_degree(exporta2015muni, mode="in", normalized=T) #deu errado
