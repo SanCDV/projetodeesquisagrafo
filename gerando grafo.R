@@ -34,10 +34,10 @@ library(stplanr)
 library(dplyr)
 
 
-EXP_2015 <- read_excel("EXP_2015_2022.xlsx")
-View(EXP_2015_2022)
+exporta <- read_excel("EXP_2015_2022.xlsx")
+
 # load data
-base <- rename(EXP_2015, municipio = "Município", destino = "País", uf = 
+exporta <- rename(exporta, municipio = "Município", destino = "País", uf = 
                  "UF do Município", ano2015 = "2015 - Valor FOB (US$)", ano2016 =
                  "2016 - Valor FOB (US$)", ano2017 = "2017 - Valor FOB (US$)", ano2018 =
                  "2018 - Valor FOB (US$)", ano2019 = "2019 - Valor FOB (US$)", ano2020 =
@@ -45,53 +45,53 @@ base <- rename(EXP_2015, municipio = "Município", destino = "País", uf =
                  "2022 - Valor FOB (US$)")
 
 
+
 # criar nova tabela de contingência
-matrix <- base[c("municipio", "destino", "ano2015")]
+#exporta2015 <- exporta[c("municipio", "destino", "ano2015")]
+#base$municipio <- as.character(base$municipio, base$destino, base$ano2015)
+
 
 # Carregamento dos dados
-dados <- matrix
+#dados <- matrix
 
 # Criação da matriz de correspondência com a função xtabs()
-matrix_correspondencia2 <- xtabs(ano2015 ~ municipio + destino, data = dados)
-matrix_correspondencia2
+#matrix_correspondencia2 <- xtabs(ano2015 ~ municipio + destino, data = dados)
+#matrix_correspondencia2
 
 # Transformação da matriz de correspondência em uma tabela
-tabela_correspondencia <- as.data.frame(matrix_correspondencia2)
-tabela_correspondencia
+#tabela_correspondencia <- as.data.frame(matrix_correspondencia2)
+#tabela_correspondencia
 
 # Montando a base de dados
 #2015 cidade/uf
-export2015 <- od_to_odmatrix(base, attrib = 11, name_orig = 1, name_dest = 3)
-export2015UF <- od_to_odmatrix(base, attrib = 11, name_orig = 2, name_dest = 3)
+exporta2015muni <- od_to_odmatrix(exporta, attrib = 11, name_orig = 1, name_dest = 3)
+exporta2015UF <- od_to_odmatrix(exporta, attrib = 11, name_orig = 2, name_dest = 3)
 
-#2016 cidade/uf
-export2016 <- od_to_odmatrix(base, attrib = 10, name_orig = 1, name_dest = 3)
-export2016UF <- od_to_odmatrix(base, attrib = 10, name_orig = 2, name_dest = 3)
 
-#2017 cidade/uf
-export2017 <- od_to_odmatrix(base, attrib = 9, name_orig = 1, name_dest = 3)
-export2017UF <- od_to_odmatrix(base, attrib = 9, name_orig = 2, name_dest = 3)
 
-#2018 cidade/uf
-export2018 <- od_to_odmatrix(base, attrib = 8, name_orig = 1, name_dest = 3)
-export2018UF <- od_to_odmatrix(base, attrib = 8, name_orig = 2, name_dest = 3)
 
-#2019 cidade/uf
-export2019 <- od_to_odmatrix(base, attrib = 7, name_orig = 1, name_dest = 3)
-export2019UF <- od_to_odmatrix(base, attrib = 7, name_orig = 2, name_dest = 3)
 
-#2020 cidade/uf
-export2020 <- od_to_odmatrix(base, attrib = 6, name_orig = 1, name_dest = 3)
-export2020UF <- od_to_odmatrix(base, attrib = 6, name_orig = 2, name_dest = 3)
 
-#2021 cidade/uf
-export2021 <- od_to_odmatrix(base, attrib = 5, name_orig = 1, name_dest = 3)
-export2021UF <- od_to_odmatrix(base, attrib = 5, name_orig = 2, name_dest = 3)
+..............................................................................
 
-#2017 cidade/uf
-export2022 <- od_to_odmatrix(base, attrib = 4, name_orig = 1, name_dest = 3)
-export2022UF <- od_to_odmatrix(base, attrib = 4, name_orig = 2, name_dest = 3)
-# ATÉ AQUI ESTA FUINCIONAL
+# criar nova tabela de contingência
+cidades <- base[c("municipio")]
+paises <- base[c("destino")]
+
+origem = unique(cidades)
+destino = unique(paises)
+
+# Matriz de coocorrência
+coocorrencia <-matrix(c (origem, destino), byrow = TRUE)
+colnames(coocorrencia) = origem
+rownames(coocorrencia) = destino
+
+# Criando o objeto da rede
+rede = graph_from_adjacency_matrix(coocorrencia, weighted = TRUE, mode = "upper")
+
+# Plotando a rede
+plot(rede, edge.width = E(rede)$weight * 0.5, vertex.label = V(rede)$name)
+
 
 ..............................................................................
 
