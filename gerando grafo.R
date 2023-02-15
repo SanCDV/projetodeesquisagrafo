@@ -53,5 +53,15 @@ exporta2015UF <- od_to_odmatrix(exporta, attrib = 11, name_orig = 2, name_dest =
 
 #degree
 grau<-degree(exporta2015muni) #funcionando
+graph
+centr_degree(exporta2015muni)
 
-centr_degree(exporta2015muni, mode="in", normalized=T) #deu errado
+
+
+#exemplo
+g <- graph(edges=c(1,2,1,3,2,3,2,4,3,4,4,5,4,6,5,6))
+layout <- layout_with_fr(grau, weights = V(grua)$degree)
+plot(g, layout = layout)
+
+
+
