@@ -53,8 +53,7 @@ exporta2015UF <- od_to_odmatrix(exporta, attrib = 11, name_orig = 2, name_dest =
 
 #degree
 grau<-degree(exporta2015muni) #funcionando
-graph
-centr_degree(exporta2015muni)
+
 
 
 
