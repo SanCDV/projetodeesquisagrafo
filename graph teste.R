@@ -21,11 +21,10 @@ V(g)$color <- ifelse(V(g)$name %in% exporta$municipio, "blue", "red")
 plot(g)
 
 # Grau e distribuição de grau dos vértices
-din <- data.frame(degree(
-  g,
-  v = V(g),
-  mode = c( "in"),
+d<- data_frame(degree(
+  graph,
+  v = V(graph),
+  mode = c("all", "out", "in", "total"),
   loops = TRUE,
-  normalized = FALSE) 
-)
-
+  normalized = FALSE)
+) 

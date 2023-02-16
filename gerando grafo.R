@@ -55,12 +55,22 @@ exporta2015UF <- od_to_odmatrix(exporta, attrib = 11, name_orig = 2, name_dest =
 grau<-degree(exporta2015muni) #funcionando
 
 
+# crie um grafo bipartido
+g <- graph_from_data_frame(exporta, directed = FALSE)
 
+# defina as cores dos vértices
+V(g)$color <- ifelse(V(g)$name %in% exporta$municipio, "blue", "red")
 
-#exemplo
-g <- graph(edges=c(1,2,1,3,2,3,2,4,3,4,4,5,4,6,5,6))
-layout <- layout_with_fr(grau, weights = V(grua)$degree)
-plot(g, layout = layout)
+# plote o grafo
+plot(g)
 
+# Grau e distribuição de grau dos vértices
+degree(
+  g,
+  v = V(g),
+  mode = c("all", "out", "in", "total"),
+  loops = TRUE,
+  normalized = FALSE
+)
 
 
