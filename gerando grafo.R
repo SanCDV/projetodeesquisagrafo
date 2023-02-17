@@ -53,10 +53,10 @@ exporta2015UF <- od_to_odmatrix(exporta, attrib = 11, name_orig = 2, name_dest =
 
 #degree
 grau<-degree(exporta2015muni) #funcionando
-
+grau <- is.data.frame(grau)
 
 # crie um grafo bipartido
-g <- graph_from_data_frame(exporta, directed = FALSE)
+g <- graph_from_data_frame(exporta, directed = FALSE )
 
 # defina as cores dos vértices
 V(g)$color <- ifelse(V(g)$name %in% exporta$municipio, "blue", "red")
@@ -65,12 +65,39 @@ V(g)$color <- ifelse(V(g)$name %in% exporta$municipio, "blue", "red")
 plot(g)
 
 # Grau e distribuição de grau dos vértices
-degree(
+
+centr_eigen(
   g,
-  v = V(g),
-  mode = c("all", "out", "in", "total"),
-  loops = TRUE,
-  normalized = FALSE
+  directed = FALSE,
+  scale = TRUE,
+  options = arpack_defaults,
+  normalized = TRUE
 )
 
+g <- sample_pa(1000, m = 4)
+centr_degree(g)$centralization
+centr_clo(g, mode = "all")$centralization
+centr_betw(g, directed = FALSE)$centralization
+centr_eigen(g, directed = FALSE)$centralization
+
+g0 <- make_graph(c(2, 1), n = 10, dir = FALSE)
+g1 <- make_star(10, mode = "undirected")
+centr_eigen(g0)$centralization
+centr_eigen(g1)$centralization
+
+centr_eigen_tmax(graph = NULL, nodes = 0, directed = FALSE, scale = TRUE)
+
+centr_eigen(g, normalized = FALSE)$centralization %>%
+  `/`(centr_eigen_tmax(g))
+centr_eigen(g, normalized = TRUE)$centralization
+
+
+  
+# Usaremos também o comando vertex.label=NA para especificar que não
+#queremos imprimir labels nos vértices da rede e vertex.size para especificar
+#o tamanho dos vértices.
+library(sand)
+exportaup <- upgrade_graph(g)
+plot(exportaup, vertex.label=NA)
+plot(exportaup, layout=layout_with_kk(exportaup), vertex.label=NA, vertex.size=10)
 
