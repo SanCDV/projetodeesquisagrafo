@@ -28,3 +28,5 @@ d<- data_frame(degree(
   loops = TRUE,
   normalized = FALSE)
 ) 
+
+write.csv(exporta2015muni, "exemplomunicipio.csv", row.names = FALSE)
